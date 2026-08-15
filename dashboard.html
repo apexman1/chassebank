@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Accounts - Chase Online Banking</title>
+    <style>
+        :root {
+            --chase-blue: #117aca;
+            --chase-dark-blue: #0b2341;
+            --chase-bg: #f4f6f8;
+            --text-main: #333333;
+            --border-color: #d1d5db;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Open Sans", Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-color: var(--chase-bg);
+            color: var(--text-main);
+        }
+
+        /* Top Banking Header */
+        header {
+            background-color: var(--chase-dark-blue);
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 40px;
+            height: 65px;
+            border-bottom: 3px solid var(--chase-blue);
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 30px;
+        }
+
+        .chase-logo {
+            font-weight: 900;
+            font-size: 24px;
+            letter-spacing: 1px;
+            color: white;
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 25px;
+            height: 65px;
+        }
+
+        .nav-links li {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            border-bottom: 4px solid transparent;
+        }
+
+        .nav-links li.active, .nav-links li:hover {
+            border-bottom-color: var(--chase-blue);
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            font-size: 14px;
+        }
+
+        .profile-menu {
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .signout-btn {
+            background: transparent;
+            border: 1px solid white;
+            color: white;
+            padding: 6px 14px;
+            border-radius: 3px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .signout-btn:hover {
+            background: rgba(255,255,255,0.1);
+        }
+
+        /* Main Dashboard Layout */
+        .dashboard-container {
+            max-width: 1200px;
+            margin: 30px auto;
+            padding: 0 20px;
+            display: grid;
+            grid-template-columns: 3fr 1fr;
+            gap: 30px;
+        }
+
+        /* Account Summaries Section */
+        .main-content {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .welcome-banner {
+            background: white;
+            padding: 20px 25px;
+            border-radius: 6px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .welcome-banner h1 {
+            font-size: 22px;
+            color: var(--chase-dark-blue);
+        }
+
+        .welcome-banner p {
+            font-size: 13px;
+            color: #666;
+        }
+
+        /* Account Group Cards */
+        .account-card {
+            background: white;
+            border-radius: 6px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            overflow: hidden;
+        }
+
+        .account-card-header {
+            background-color: #e9ecef;
+            padding: 12px 20px;
+            font-weight: bold;
+            font-size: 15px;
+            color: var(--chase-dark-blue);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .account-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 18px 20px;
+            border-bottom: 1px solid #eee;
+            cursor: pointer;
+            transition: background 0.1s;
+        }
+
+        .account-row:last-child {
+            border-bottom: none;
+        }
+
+        .account-row:hover {
+            background-color: #f8f9fa;
+        }
+
+        .acc-info h4 {
+            font-size: 15px;
+            color: var(--chase-blue);
+            margin-bottom: 4px;
+        }
+
+        .acc-info p {
+            font-size: 13px;
+            color: #666;
+        }
+
+        .acc-balance {
+            text-align: right;
+        }
+
+        .acc-balance .amount {
+            font-size: 18px;
+            font-weight: bold;
+            color: #111;
+        }
+
+        .acc-balance .available {
+            font-size: 12px;
+            color: #666;
+        }
+
+        /* Quick Action Bar */
+        .quick-actions {
+            background: white;
+            border-radius: 6px;
+            padding: 20px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            text-align: center;
+        }
+
+        .action-item {
+            padding: 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .action-item:hover {
+            background-color: #f1f5f9;
+        }
+
+        .action-item .icon {
+            font-size: 24px;
+            margin-bottom: 5px;
+        }
+
+        .action-item span {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--chase-dark-blue);
+        }
+
+        /* Sidebar Panel */
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .side-box {
+            background: white;
+            border-radius: 6px;
+            padding: 20px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        .side-box h3 {
+            font-size: 16px;
+            color: var(--chase-dark-blue);
+            margin-bottom: 12px;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 8px;
+        }
+
+        .credit-score-display {
+            text-align: center;
+            padding: 10px 0;
+        }
+
+        .score-number {
+            font-size: 36px;
+            font-weight: bold;
+            color: #2e7d32;
+        }
+
+        .score-label {
+            font-size: 13px;
+            color: #666;
+            margin-top: 5px;
+        }
+
+        .promo-link {
+            display: block;
+            margin-top: 10px;
+            font-size: 13px;
+            color: var(--chase-blue);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .promo-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Transaction Modal Popup */
+        #txnModal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.5);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background: white;
+            width: 500px;
+            border-radius: 6px;
+            padding: 25px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .modal-header h3 {
+            color: var(--chase-dark-blue);
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+        }
+
+        .txn-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+        }
+
+        .txn-table th, .txn-table td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+
+        .txn-table th {
+            background-color: #f8f9fa;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <header>
+        <div class="header-left">
+            <a href="#" class="chase-logo">CHASE <span style="font-weight: 300; font-size: 18px;">ONLINE</span></a>
+            <ul class="nav-links">
+                <li class="active" onclick="switchTab('accounts')">Accounts</li>
+                <li onclick="switchTab('pay')">Pay & Transfer</li>
+                <li onclick="switchTab('invest')">Investments</li>
+                <li onclick="switchTab('plan')">Plan & Track</li>
+            </ul>
+        </div>
+        <div class="header-right">
+            <div class="profile-menu">👤 Welcome, Alex</div>
+            <button class="signout-btn" onclick="signOut()">Sign out</button>
+        </div>
+    </header>
+
+    <!-- Dashboard Content Layout -->
+    <div class="dashboard-container">
+        
+        <!-- Main Column: Accounts -->
+        <div class="main-content">
+            
+            <!-- Welcome Banner -->
+            <div class="welcome-banner">
+                <div>
+                    <h1>Account Overview</h1>
+                    <p>Last login: Today, 05:50 AM WAT from Chrome Desktop</p>
+                </div>
+                <button class="signout-btn" style="background: var(--chase-blue); border: none;" onclick="openAction('Open New Account')">+ Open an Account</button>
+            </div>
+
+            <!-- Quick Action Toolbar -->
+            <div class="quick-actions">
+                <div class="action-item" onclick="openAction('Pay Bills')">
+                    <div class="icon">💸</div>
+                    <span>Pay Bills</span>
+                </div>
+                <div class="action-item" onclick="openAction('Transfer Money')">
+                    <div class="icon">🔄</div>
+                    <span>Transfer</span>
+                </div>
+                <div class="action-item" onclick="openAction('Deposit Check')">
+                    <div class="icon">📥</div>
+                    <span>Deposit Checks</span>
+                </div>
+                <div class="action-item" onclick="openAction('Zelle QuickPay')">
+                    <div class="icon">⚡</div>
+                    <span>Send with Zelle</span>
+                </div>
+            </div>
+
+            <!-- Checking & Savings Group -->
+            <div class="account-card">
+                <div class="account-card-header">
+                    <span>Checking & Savings</span>
+                    <span>$24,850.40 Total</span>
+                </div>
+                <div class="account-row" onclick="openAccountDetails('Chase Total Checking (...4921)')">
+                    <div class="acc-info">
+                        <h4>CHASE TOTAL CHECKING (...4921)</h4>
+                        <p>Available Balance</p>
+                    </div>
+                    <div class="acc-balance">
+                        <div class="amount">$6,420.15</div>
+                        <div class="available">Posted Balance: $6,420.15</div>
+                    </div>
+                </div>
+                <div class="account-row" onclick="openAccountDetails('Chase Premier Savings (...8812)')">
+                    <div class="acc-info">
+                        <h4>CHASE PREMIER SAVINGS (...8812)</h4>
+                        <p>Available Balance</p>
+                    </div>
+                    <div class="acc-balance">
+                        <div class="amount">$18,430.25</div>
+                        <div class="available">Interest YTD: $142.80</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Credit Cards Group -->
+            <div class="account-card">
+                <div class="account-card-header">
+                    <span>Credit Cards</span>
+                    <span>-$1,245.80 Balance</span>
+                </div>
+                <div class="account-row" onclick="openAccountDetails('Chase Freedom Unlimited (...3019)')">
+                    <div class="acc-info">
+                        <h4>CHASE FREEDOM UNLIMITED (...3019)</h4>
+                        <p>Current Balance • Available Credit: $13,754.20</p>
+                    </div>
+                    <div class="acc-balance">
+                        <div class="amount" style="color: #c92a2a;">-$1,245.80</div>
+                        <div class="available">Payment Due: Sept 15</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Mortgages & Loans Group -->
+            <div class="account-card">
+                <div class="account-card-header">
+                    <span>Mortgages</span>
+                    <span>$285,400.00 Principal</span>
+                </div>
+                <div class="account-row" onclick="openAccountDetails('Chase Mortgage Loan (...7190)')">
+                    <div class="acc-info">
+                        <h4>CHASE 30-YEAR FIXED MORTGAGE (...7190)</h4>
+                        <p>Principal Balance</p>
+                    </div>
+                    <div class="acc-balance">
+                        <div class="amount">$285,400.00</div>
+                        <div class="available">Next Payment: $1,650.00</div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Sidebar Column -->
+        <div class="sidebar">
+            
+            <!-- Credit Journey Box -->
+            <div class="side-box">
+                <h3>Credit Journey®</h3>
+                <div class="credit-score-display">
+                    <div class="score-number">762</div>
+                    <div class="score-label">Good • Updated Today</div>
+                </div>
+                <a class="promo-link" onclick="openAction('Credit Journey Dashboard')">View your full credit report &raquo;</a>
+            </div>
+
+            <!-- Offers & Rewards -->
+            <div class="side-box">
+                <h3>Chase Offers</h3>
+                <p style="font-size: 13px; color: #555; margin-bottom: 10px;">Activate cash back deals at your favorite stores.</p>
+                <div style="background: #f8f9fa; padding: 10px; border-radius: 4px; font-size: 13px; font-weight: bold; margin-bottom: 8px;">
+                    🎯 10% back at Starbucks
+                </div>
+                <div style="background: #f8f9fa; padding: 10px; border-radius: 4px; font-size: 13px; font-weight: bold;">
+                    🎯 5% back at Whole Foods
+                </div>
+                <a class="promo-link" onclick="openAction('All Chase Offers')">See all 24 active offers &raquo;</a>
+            </div>
+
+            <!-- Customer Service Box -->
+            <div class="side-box">
+                <h3>Need Help?</h3>
+                <p style="font-size: 13px; color: #555; margin-bottom: 10px;">Connect with an online customer service specialist instantly.</p>
+                <button class="signout-btn" style="width: 100%; background: var(--chase-dark-blue); border: none;" onclick="openAction('Customer Secure Message Center')">Message Us</button>
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Interactive Transaction Modal Popup -->
+    <div id="txnModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modalAccTitle">Account Activity</h3>
+                <button class="close-modal" onclick="closeModal()">&times;</button>
+            </div>
+            <p style="font-size: 13px; color: #666; margin-bottom: 15px;">Recent transaction history for selected portfolio item:</p>
+            <table class="txn-table">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Description</th>
+                        <th>Amount</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Aug 14</td>
+                        <td>Amazon.com Marketplace</td>
+                        <td style="color: #c92a2a;">-$45.99</td>
+                    </tr>
+                    <tr>
+                        <td>Aug 12</td>
+                        <td>Employer Direct Deposit</td>
+                        <td style="color: #2e7d32;">+$2,850.00</td>
+                    </tr>
+                    <tr>
+                        <td>08/10</td>
+                        <td>Shell Oil Gas Station</td>
+                        <td style="color: #c92a2a;">-$38.20</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        function openAccountDetails(accountName) {
+            document.getElementById("modalAccTitle").innerText = accountName;
+            document.getElementById("txnModal").style.display = "flex";
+        }
+
+        function closeModal() {
+            document.getElementById("txnModal").style.display = "none";
+        }
+
+        function openAction(actionName) {
+            alert("Chase Online Banking: Initiating '" + actionName + "' module.");
+        }
+
+        function switchTab(tabName) {
+            alert("Navigating to Chase " + tabName.toUpperCase() + " module.");
+        }
+
+        function signOut() {
+            if(confirm("Are you sure you want to sign out of Chase Online?")) {
+                alert("Successfully signed out.");
+                location.reload();
+            }
+        }
+    </script>
+</body>
+</html>
